@@ -38,6 +38,28 @@
           if (event.data?.id !== 'hello-iframe') {
             return;
           }
+
+          window.addEventListener(
+            'message',
+            function (event) {
+              // Check if the message is coming from the iframe
+              if (event.data?.id !== 'hello-iframe') {
+                return;
+              }
+
+              var iframe = event.target.parent; // We can only get the actual iframe element from the event
+
+              var targetMessage = iframe.parentNode;
+              targetMessage.style.color = getRandomColor();
+
+              // Flash blue border and fade out
+              targetMessage.style.border = '2px solid blue';
+              setTimeout(function () {
+                targetMessage.style.border = 'none';
+              }, 1000);
+            },
+            false
+          );
         },
         false
       );
