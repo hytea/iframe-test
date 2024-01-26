@@ -34,12 +34,40 @@
   </head>
   <body>
     <h1 class="rainbow">Hello</h1>
-    <button id="messageButton">Send Message</button>
+    <button id="messageButton">Change Font Colors</button>
+    <button id="backgroundButton">Change Background Color</button>
+
     <script>
+      const messageId = new URLSearchParams(window.location.search).get(
+        'messageId'
+      );
+      const backgroundColor = new URLSearchParams(window.location.search).get(
+        'backgroundColor'
+      );
       document
         .getElementById('messageButton')
         .addEventListener('click', function () {
-          window.parent.postMessage({ id: 'hello-iframe' }, '*');
+          window.parent.postMessage(
+            {
+              type: 'set-text-color',
+              id: 'hello-iframe',
+              messageId: messageId,
+            },
+            '*'
+          );
+        });
+      document
+        .getElementById('backgroundButton')
+        .addEventListener('click', function () {
+          window.parent.postMessage(
+            {
+              type: 'set-background-color',
+              id: 'hello-iframe',
+              messageId: messageId,
+              color: backgroundColor,
+            },
+            '*'
+          );
         });
     </script>
   </body>
