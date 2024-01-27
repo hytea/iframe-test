@@ -34,8 +34,8 @@
   </head>
   <body>
     <h1 class="rainbow">Hello</h1>
-    <button id="messageButton">Change Font Colors</button>
-    <button id="backgroundButton">Change Background Color</button>
+    <button id="messageButton">Random Font Color</button>
+    <button id="backgroundButton">Toggle Background Color</button>
 
     <script>
       const messageId = new URLSearchParams(window.location.search).get(
@@ -49,8 +49,7 @@
         .addEventListener('click', function () {
           window.parent.postMessage(
             {
-              type: 'set-text-color',
-              id: 'hello-iframe',
+              type: 'randomize-text-color',
               messageId: messageId,
             },
             '*'
@@ -62,9 +61,7 @@
           window.parent.postMessage(
             {
               type: 'set-background-color',
-              id: 'hello-iframe',
-              messageId: messageId,
-              color: backgroundColor,
+              payload: { color: backgroundColor },
             },
             '*'
           );
