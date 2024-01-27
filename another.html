@@ -34,12 +34,37 @@
   </head>
   <body>
     <h1 class="rainbow">Hello</h1>
-    <button id="messageButton">Send Message</button>
+    <button id="messageButton">Random Font Color</button>
+    <button id="backgroundButton">Toggle Background Color</button>
+
     <script>
+      const messageId = new URLSearchParams(window.location.search).get(
+        'messageId'
+      );
+      const backgroundColor = new URLSearchParams(window.location.search).get(
+        'backgroundColor'
+      );
       document
         .getElementById('messageButton')
         .addEventListener('click', function () {
-          window.parent.postMessage({ id: 'hello-iframe' }, '*');
+          window.parent.postMessage(
+            {
+              type: 'randomize-text-color',
+              messageId: messageId,
+            },
+            '*'
+          );
+        });
+      document
+        .getElementById('backgroundButton')
+        .addEventListener('click', function () {
+          window.parent.postMessage(
+            {
+              type: 'set-background-color',
+              payload: { color: backgroundColor },
+            },
+            '*'
+          );
         });
     </script>
   </body>
