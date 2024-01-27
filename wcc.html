@@ -5,7 +5,7 @@
     <style>
       #chat-container {
         width: 400px;
-        height: 500px;
+        height: auto;
         border: 1px solid #ccc;
         overflow-y: scroll;
       }
@@ -38,6 +38,35 @@
           if (event.data?.id !== 'hello-iframe') {
             return;
           }
+
+          const iframes = document.querySelectorAll('iframe');
+          let targetMessage;
+
+          for (let i = iframes.length - 1; i >= 0; i--) {
+            if (iframes[i].contentWindow === event.source) {
+              targetMessage = iframes[i].parentElement;
+              break;
+            }
+          }
+
+          if (event.data.type === 'set-text-color') {
+            const allMessages = document.querySelectorAll('.message');
+            allMessages.forEach((message) => {
+              if (message.id !== event.data.messageId) {
+                message.style.color = getRandomColor();
+              }
+            });
+          } else if (event.data.type === 'set-background-color') {
+            // Set the chat-container background color
+            document.getElementById('chat-container').style.backgroundColor =
+              event.data.color;
+          }
+
+          // Flash blue border and fade out
+          targetMessage.style.border = '2px solid blue';
+          setTimeout(function () {
+            targetMessage.style.border = 'none';
+          }, 1000);
         },
         false
       );
@@ -47,11 +76,31 @@
     <div id="chat-container">
       <div class="message">Hello!</div>
       <div class="message">How are you?</div>
-      <div class="message iframe">
-        <iframe src="another.html" width="100%" height="125"></iframe>
+      <div class="message iframe" id="first">
+        <iframe
+          src="another.html?messageId=first&backgroundColor=white"
+          width="100%"
+          height="125"
+        ></iframe>
       </div>
-      <div class="message iframe">
-        <iframe src="another.html" width="100%" height="125"></iframe>
+      <div class="message">I'm good, thanks!</div>
+      <div class="message">Wonderful!</div>
+
+      <div class="message iframe" id="second">
+        <iframe
+          src="another.html?messageId=second&backgroundColor=red"
+          width="100%"
+          height="125"
+        ></iframe>
+      </div>
+      <div class="message">How are you?</div>
+      <div class="message">I'm good, thanks!</div>
+      <div class="message iframe" id="third">
+        <iframe
+          src="another.html?messageId=third&backgroundColor=yellow"
+          width="100%"
+          height="125"
+        ></iframe>
       </div>
     </div>
   </body>
